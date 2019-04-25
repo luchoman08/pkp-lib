@@ -629,10 +629,11 @@ class PKPUsageStatsPlugin extends GenericPlugin {
 	 */
 	function _getDownloadStats($pubObjectId) {
 		$cache = CacheManager::getManager()->getCache('downloadStats', $pubObjectId, array($this, '_downloadStatsCacheMiss'));
-		if (time() - $cache->getCacheTime() > 60 * 60 * 24) {
+		/*if (time() - $cache->getCacheTime() > 60 * 60 * 24) {
 			// Cache is older than one day, erase it.
 			$cache->flush();
-		}
+		}*/
+		$cache->flush();
 		$statsReports = $cache->get($pubObjectId);
 
 		$currentYear = date("Y");
@@ -725,7 +726,7 @@ class PKPUsageStatsPlugin extends GenericPlugin {
 	function _downloadStatsCacheMiss($cache, $pubObjectId) {
 		$filter = array(
 				STATISTICS_DIMENSION_SUBMISSION_ID => $pubObjectId,
-				STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_SUBMISSION_FILE
+				//STATISTICS_DIMENSION_ASSOC_TYPE => ASSOC_TYPE_SUBMISSION_FILE
 		);
 		$orderBy = array(STATISTICS_DIMENSION_MONTH => STATISTICS_ORDER_ASC);
 		$reportPlugin = $this->getReportPlugin();
